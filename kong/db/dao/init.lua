@@ -409,7 +409,7 @@ end
 
 local function propagate_cascade_delete_events(entries, options)
   for _, entry in ipairs(entries) do
-    entry.dao:post_crud_event("delete", entry.entity, options)
+    entry.dao:post_crud_event("delete", entry.entity, nil, options)
   end
 end
 
@@ -632,7 +632,7 @@ local function generate_foreign_key_methods(schema)
           return nil, err, err_t
         end
 
-        self:post_crud_event("update", row, options)
+        self:post_crud_event("update", row, nil, options)
 
         return row
       end
@@ -676,7 +676,7 @@ local function generate_foreign_key_methods(schema)
           return nil, tostring(err_t), err_t
         end
 
-        self:post_crud_event("delete", entity, options)
+        self:post_crud_event("delete", entity, nil, options)
         propagate_cascade_delete_events(cascade_entries, options)
 
         return true
@@ -855,7 +855,7 @@ function DAO:insert(entity, options)
     return nil, err, err_t
   end
 
-  self:post_crud_event("create", row, options)
+  self:post_crud_event("create", row, nil, options)
 
   return row
 end
@@ -928,7 +928,7 @@ function DAO:upsert(primary_key, entity, options)
     return nil, err, err_t
   end
 
-  self:post_crud_event("update", row, options)
+  self:post_crud_event("update", row, nil, options)
 
   return row
 end
@@ -972,7 +972,7 @@ function DAO:delete(primary_key, options)
     return nil, tostring(err_t), err_t
   end
 
-  self:post_crud_event("delete", entity, options)
+  self:post_crud_event("delete", entity, nil, options)
   propagate_cascade_delete_events(cascade_entries, options)
 
   return true
